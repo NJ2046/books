@@ -8,7 +8,11 @@
 import scrapy
 
 
-class BooksItem(scrapy.Item):
+class MovieItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    name = scrapy.Field()
+    info = scrapy.Field()
+    rating = scrapy.Field()
+    num = scrapy.Field()
+    quote = scrapy.Field()
+    img_url = scrapy.Field()

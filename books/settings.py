@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'books.spiders'
 #USER_AGENT = 'books (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -64,9 +64,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'books.pipelines.BooksPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'books.pipelines.MoviePipeline': 1,
+    'books.pipelines.ImagePipeline': 1,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +89,13 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
+IMAGES_STORE = 'D:\\img\\'
+# Mysql_db_config_information
+MYSQL_HOST = '127.0.0.1'
+MYSQL_DBNAME = 'testdb'
+MYSQL_USER = 'liuzhejun'
+MYSQL_PASSWD = 'lk1821-*'
+MYSQL_PORT = '3306'
