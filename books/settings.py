@@ -65,8 +65,9 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'books.pipelines.MoviePipeline': 1,
-    'books.pipelines.ImagePipeline': 1,
+    # 'books.pipelines.ImagePipeline': 1,
+    # 'books.pipelines.DBPipeline': 1
+    'books.pipelines.bookPipeline': 1
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -92,10 +93,10 @@ ITEM_PIPELINES = {
 
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
-IMAGES_STORE = 'D:\\img\\'
+IMAGES_STORE = '../data/test'
 # Mysql_db_config_information
 MYSQL_HOST = '127.0.0.1'
-MYSQL_DBNAME = 'testdb'
+MYSQL_DBNAME = 'study_db'
 MYSQL_USER = 'liuzhejun'
 MYSQL_PASSWD = 'lk1821-*'
 MYSQL_PORT = '3306'

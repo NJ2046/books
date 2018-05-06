@@ -7,6 +7,9 @@ import scrapy
 import json
 from scrapy.contrib.pipeline.images import ImagesPipeline
 from scrapy.exceptions import DropItem
+import pymysql
+from logging import log
+from books import settings
 
 
 class MoviePipeline(object):
@@ -36,3 +39,69 @@ class ImagePipeline(ImagesPipeline):
 
         item['image_url'] = image_url
         return item
+
+
+class DBPipeline(object):
+    def __init__(self):
+        # 连接数据库
+        self.connect = pymysql.connect(
+            host=settings.MYSQL_HOST,
+            port=3306,
+            db=settings.MYSQL_DBNAME,
+            user=settings.MYSQL_USER,
+            passwd=settings.MYSQL_PASSWD,
+            charset='utf8',
+            use_unicode=True)
+
+        # 通过cursor执行增删查改
+        self.cursor = self.connect.cursor();
+
+    def process_item(self, item, spider):
+        try:
+            # 插入数据
+            self.cursor.execute(
+                """insert into tmp(name, path)
+                value (%s, %s)""",
+                (item['name'],
+                 item['img_url'].split('/')[-1]))
+
+            # 提交sql语句
+            self.connect.commit()
+
+        except Exception as error:
+            # 出现错误时打印错误日志
+            log(error)
+        return item
+
+
+class bookPipeline(object):
+    def __init__(self):
+        # 连接数据库
+        self.connect = pymysql.connect(
+            host=settings.MYSQL_HOST,
+            port=3306,
+            db=settings.MYSQL_DBNAME,
+            user=settings.MYSQL_USER,
+            passwd=settings.MYSQL_PASSWD,
+            charset='utf8',
+            use_unicode=True)
+
+        # 通过cursor执行增删查改
+        self.cursor = self.connect.cursor();
+
+    def process_item(self, item, spider):
+        try:
+            # 插入数据
+            self.cursor.execute(
+                """insert into tmp(name)
+                value (%s)""",
+                (item['b_name']))
+
+            # 提交sql语句
+            self.connect.commit()
+
+        except Exception as error:
+            # 出现错误时打印错误日志
+            log(error, 'wocuole')
+        return item
+

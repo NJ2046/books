@@ -16,3 +16,8 @@ class MovieItem(scrapy.Item):
     num = scrapy.Field()
     quote = scrapy.Field()
     img_url = scrapy.Field()
+
+
+class bookitem(scrapy.Item):
+    b_name = scrapy.Field()
+    # b_img_url = scrapy.Field()
