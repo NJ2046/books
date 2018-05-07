@@ -65,9 +65,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # 'books.pipelines.ImagePipeline': 1,
-    # 'books.pipelines.DBPipeline': 1
-    'books.pipelines.bookPipeline': 1
+    'books.pipelines.bookPipeline': 1,
+    'books.pipelines.ImagePipeline': 2,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

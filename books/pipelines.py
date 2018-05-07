@@ -29,7 +29,7 @@ class MoviePipeline(object):
 
 class ImagePipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
-        yield scrapy.Request(item['img_url'])
+        yield scrapy.Request(item['b_img_url'])
 
     def item_completed(self, results, item, info):
         image_url = [x['path'] for ok, x in results if ok]
@@ -37,7 +37,7 @@ class ImagePipeline(ImagesPipeline):
         if not image_url:
             raise DropItem('item contains no image')
 
-        item['image_url'] = image_url
+        item['b_image_url'] = image_url
         return item
 
 
@@ -58,12 +58,16 @@ class DBPipeline(object):
 
     def process_item(self, item, spider):
         try:
+            t = item['b_img_url'].split('/')[-1]
+            print('---------------------------------------------------------------------')
+            print(t)
+            print('---------------------------------------------------------------------')
             # 插入数据
             self.cursor.execute(
                 """insert into tmp(name, path)
                 value (%s, %s)""",
                 (item['name'],
-                 item['img_url'].split('/')[-1]))
+                 item['b_img_url'].split('/')[-1]))
 
             # 提交sql语句
             self.connect.commit()
@@ -92,11 +96,25 @@ class bookPipeline(object):
     def process_item(self, item, spider):
         try:
             # 插入数据
-            self.cursor.execute(
-                """insert into tmp(name)
-                value (%s)""",
-                (item['b_name']))
-
+            f = item['b_price'][0]
+            name = item['b_d_name'][0]
+            pub = item['b_publish'][0]
+            isbn = item['b_isbn'][0]
+            writer = item['b_writer'][0]
+            ps = ''.join(item['b_ps'])
+            path = item['b_img_url'].split('/')[-1]
+            f = float(f)
+            # self.cursor.execute(
+            #    """insert into tmp(name, publish, price)
+            # value (%s, %s, %f)""",
+            #     (item['b_d_name'],
+            #     item['b_publish'],
+            #     f
+            #    ))
+            sql = "insert into tmp(name, publish, price, isbn, writer, ps, path) \
+            values ('%s', '%s', '%f', '%s', '%s', '%s', '%s')" \
+                  % (name, pub, f, isbn, writer, ps, path)
+            self.cursor.execute(sql)
             # 提交sql语句
             self.connect.commit()
 
