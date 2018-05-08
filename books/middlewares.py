@@ -6,7 +6,10 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
+import time
+import hashlib
+import requests
+import socket
 
 class BooksSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -69,24 +72,24 @@ class BooksDownloaderMiddleware(object):
         return s
 
     def process_request(self, request, spider):
-        # Called for each request that goes through the downloader
-        # middleware.
-
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
-        return None
+        """
+        proxy = self.get_proxy()
+        print("this is request ip:" + proxy)
+        request.meta['proxy'] = proxy
+        url, port = self.get_proxy()
+        ip = socket.gethostbyname(url)
+        proxy = ip + ':' + port
+        request.meta['proxy'] = proxy
+        """
+        pass
 
     def process_response(self, request, response, spider):
-        # Called with the response returned from the downloader.
-
-        # Must either;
-        # - return a Response object
-        # - return a Request object
-        # - or raise IgnoreRequest
+        con = response.text
+        if '检测到有异常' in con:
+            proxy = self.get_proxy()
+            print("this is request ip:" + proxy)
+            request.meta['proxy'] = proxy
+            return request
         return response
 
     def process_exception(self, request, exception, spider):
@@ -101,3 +104,21 @@ class BooksDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+    def get_proxy(self):
+        t = time.time()
+        timestamp = str((int(round(t * 1000))))
+        username = 'hyshviehi5899_test'
+        password = '12345678'
+        md5 = username + password + timestamp
+        h1 = hashlib.md5()
+        h1.update(md5.encode(encoding='utf-8'))
+        md5 = h1.hexdigest()
+        url = 'http://ip1.feiyiproxy.com:88/open?user_name=' + username + '&timestamp=' + timestamp + '&md5=' + md5 + '&pattern=json&number=1'
+        re =requests.get(url)
+        re =re.json()
+        re = str(re['domain']) + ':' + str(re['port'][0])
+        # return str(re['domain']), str(re['port'][0])
+        return  re
+
+

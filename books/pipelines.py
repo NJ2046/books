@@ -96,13 +96,14 @@ class bookPipeline(object):
     def process_item(self, item, spider):
         try:
             # 插入数据
+            s = item['b_s_name'][0]
             f = item['b_price'][0]
             name = item['b_d_name'][0]
             pub = item['b_publish'][0]
             isbn = item['b_isbn'][0]
             writer = item['b_writer'][0]
             ps = ''.join(item['b_ps'])
-            path = item['b_img_url'].split('/')[-1]
+            path = item['b_img_url']
             f = float(f)
             # self.cursor.execute(
             #    """insert into tmp(name, publish, price)
@@ -111,9 +112,9 @@ class bookPipeline(object):
             #     item['b_publish'],
             #     f
             #    ))
-            sql = "insert into tmp(name, publish, price, isbn, writer, ps, path) \
-            values ('%s', '%s', '%f', '%s', '%s', '%s', '%s')" \
-                  % (name, pub, f, isbn, writer, ps, path)
+            sql = "insert into tmp(name, publish, price, isbn, writer, ps, path, source) \
+            values ('%s', '%s', '%f', '%s', '%s', '%s', '%s', '%s')" \
+                  % (name, pub, f, isbn, writer, ps, path, s)
             self.cursor.execute(sql)
             # 提交sql语句
             self.connect.commit()

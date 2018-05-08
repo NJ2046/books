@@ -52,9 +52,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'books.middlewares.BooksDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'books.middlewares.BooksDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -65,8 +65,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'books.pipelines.bookPipeline': 1,
-    'books.pipelines.ImagePipeline': 2,
+    # 'books.pipelines.bookPipeline': 1,
+    'books.pipelines.ImagePipeline': 1,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
