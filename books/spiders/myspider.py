@@ -30,7 +30,7 @@ class books(scrapy.Spider):
     name = 'books'
     allowed_domain = ['book.douban.com/']
     start_urls = list()
-    with open('../data/input/test', 'r', encoding='utf-8') as rd:
+    with open('../data/input/win', 'r', encoding='utf-8') as rd:
         for line in rd:
             start_urls.append(line.strip())
 
@@ -40,18 +40,19 @@ class books(scrapy.Spider):
     def parse(self, response):
         item = bookitem()
         self.browser.get(response.url)
-        source_book = self.browser.find_element_by_xpath('//div[@class="root"]')
-        source_book = str(source_book.text)
-        publish = '搜索(.*)的电影'
-        p1 = re.compile(publish)
-        m1 = p1.findall(source_book)
-        item['b_s_name'] = m1
-        s_name = m1[0]
         if 'search' in response.url:
             """
             selector = scrapy.Selector(response)
             books = selector.xpath("//div[@class='item-root']")
             """
+            source_book = self.browser.find_element_by_xpath('//div[@class="root"]')
+            source_book = str(source_book.text)
+            publish = '搜索(.*)的电影'
+            p1 = re.compile(publish)
+            m1 = p1.findall(source_book)
+            item['b_s_name'] = m1
+            s_name = m1[0]
+            s_name = s_name.replace('"', '')
             books = self.browser.find_elements_by_xpath('//div[@class="item-root"]')
             if books:
                 if len(books) > 7:
@@ -59,17 +60,23 @@ class books(scrapy.Spider):
                         if i > 0:
                             a = books[i].find_element_by_xpath('./a')
                             next_page = a.get_attribute('href')
+                            a = a.find_element_by_xpath('./img')
+                            name = a.get_attribute('alt')
+
                             if next_page:
-                                yield scrapy.Request(next_page, callback=self.parse_item)
-                                # yield scrapy.Request(next_page, callback=self.parse)
+                                if s_name:
+                                    with open('../data/output/relation', 'a', encoding='utf-8') as w:
+                                        w.write(s_name + '\t\t' + name + '\n')
+                                # yield scrapy.Request(next_page, callback=self.parse_item)
+                                yield scrapy.Request(next_page, callback=self.parse)
                                 break
                 else:
                     for i in range(len(books)):
                         a = books[i].find_element_by_xpath('./a')
                         next_page = a.get_attribute('href')
                         if next_page:
-                            # yield scrapy.Request(next_page, callback=self.parse)
-                            yield scrapy.Request(next_page, callback=self.parse_item)
+                            yield scrapy.Request(next_page, callback=self.parse)
+                            # yield scrapy.Request(next_page, callback=self.parse_item)
                             break
             else:
                 pass
@@ -109,9 +116,3 @@ class books(scrapy.Spider):
             item['b_ps'] = e.xpath('//*[@id="link-report"]/div[1]/div/p/text()').extract()
             item['b_img_url'] = e.xpath('//*[@id="mainpic"]/a/@href').extract()[0]
             yield item
-
-    def parse_item(self, response):
-        a = 1
-        a += 2
-        print(a)
-        pass

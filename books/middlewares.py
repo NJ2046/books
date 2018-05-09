@@ -105,6 +105,7 @@ class BooksDownloaderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
+    @classmethod
     def get_proxy(self):
         t = time.time()
         timestamp = str((int(round(t * 1000))))
@@ -114,11 +115,13 @@ class BooksDownloaderMiddleware(object):
         h1 = hashlib.md5()
         h1.update(md5.encode(encoding='utf-8'))
         md5 = h1.hexdigest()
-        url = 'http://ip1.feiyiproxy.com:88/open?user_name=' + username + '&timestamp=' + timestamp + '&md5=' + md5 + '&pattern=json&number=1'
+        # url = 'http://ip1.feiyiproxy.com:88/open?user_name=' + username + '&timestamp=' + timestamp + '&md5=' + md5 + '&pattern=json&number=1'
+        url = 'http://webapi.http.zhimacangku.com/getip?num=1&type=2&pro=&city=0&yys=0&port=1&pack=20731&ts=0&ys=0&cs=0&lb=1&sb=0&pb=4&mr=1&regions='
         re =requests.get(url)
         re =re.json()
-        re = str(re['domain']) + ':' + str(re['port'][0])
-        # return str(re['domain']), str(re['port'][0])
-        return  re
+        ip = re['data'][0]['ip']
+        port = str(re['data'][0]['port'])
+        result = ip + ':' + port
+        return result
 
 

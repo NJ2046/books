@@ -112,9 +112,9 @@ class bookPipeline(object):
             #     item['b_publish'],
             #     f
             #    ))
-            sql = "insert into tmp(name, publish, price, isbn, writer, ps, path, source) \
-            values ('%s', '%s', '%f', '%s', '%s', '%s', '%s', '%s')" \
-                  % (name, pub, f, isbn, writer, ps, path, s)
+            sql = "insert into tmp(name, publish, price, isbn, writer, ps, path) \
+            values ('%s', '%s', '%f', '%s', '%s', '%s', '%s')" \
+                  % (name, pub, f, isbn, writer, ps, path)
             self.cursor.execute(sql)
             # 提交sql语句
             self.connect.commit()
