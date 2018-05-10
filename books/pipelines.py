@@ -121,6 +121,6 @@ class bookPipeline(object):
 
         except Exception as error:
             # 出现错误时打印错误日志
-            log(error, 'wocuole')
+            log(error, 'database_err')
         return item
 

@@ -30,16 +30,22 @@ class books(scrapy.Spider):
     name = 'books'
     allowed_domain = ['book.douban.com/']
     start_urls = list()
-    with open('../data/input/win', 'r', encoding='utf-8') as rd:
+    with open('../data/input/test', 'r', encoding='utf-8') as rd:
         for line in rd:
             start_urls.append(line.strip())
 
     def __init__(self):
-        self.browser = webdriver.Chrome("C:\\Users\\NJ\Desktop\\test\\chromedriver.exe")
+        # self.browser = webdriver.Chrome('C:\\Users\\NJ\Desktop\\test\\chromedriver.exe')
+        self.options = webdriver.ChromeOptions()
+        self.options.add_argument("--proxy-server=https://222.186.45.127:61443")
+        self.browser = webdriver.Chrome(executable_path="C:\\Users\\NJ\Desktop\\test\\chromedriver.exe", chrome_options=self.options)
+
 
     def parse(self, response):
         item = bookitem()
         self.browser.get(response.url)
+        self.browser.get('http://httpbin.org/ip')
+        print(self.browser.page_source)
         if 'search' in response.url:
             """
             selector = scrapy.Selector(response)
