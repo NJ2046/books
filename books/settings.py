@@ -96,6 +96,6 @@ IMAGES_STORE = '../data/test'
 # Mysql_db_config_information
 MYSQL_HOST = '127.0.0.1'
 MYSQL_DBNAME = 'study_db'
-MYSQL_USER = 'liuzhejun'
-MYSQL_PASSWD = 'lk1821-*'
+MYSQL_USER = 'xxxxx'
+MYSQL_PASSWD = 'xxxxxx'
 MYSQL_PORT = '3306'
